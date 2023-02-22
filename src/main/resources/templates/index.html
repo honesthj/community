@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>码农社区</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -26,16 +26,16 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" th:if="${session.user!=null}">
+                <li class="dropdown" th:if="${session.login!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
+                       aria-expanded="false" th:text="${session.login.getName()}"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">个人资料</a></li>
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
-                <li th:if="${session.user==null}"><a
+                <li th:if="${session.login==null}"><a
                         href="https://github.com/login/oauth/authorize?client_id=354b6dfffc186bef405d&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登录</a>
                 </li>
             </ul>

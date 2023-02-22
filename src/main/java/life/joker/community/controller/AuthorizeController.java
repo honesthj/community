@@ -1,6 +1,8 @@
 package life.joker.community.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import life.joker.community.dto.AccessTokenDTO;
 import life.joker.community.dto.GithubUser;
 import life.joker.community.mapper.LoginMapper;
@@ -33,9 +35,9 @@ public class AuthorizeController {
     private String redirectUri;
 
     @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state") String state,
-                           HttpServletRequest request) {
+    public String callback(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -45,14 +47,14 @@ public class AuthorizeController {
         GithubUser user = githubProvider.getUser(accessToken);
         if (user != null) {
             Login login = new Login();
-            login.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            login.setToken(token);
             login.setName(user.getName());
             login.setAccountId(String.valueOf(user.getId()));
             login.setGmtCreate(System.currentTimeMillis());
             login.setGmtModified(login.getGmtCreate());
             loginMapper.insert(login);
-            //登录成功，写cookie和session
-            request.getSession().setAttribute("user", user);
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
         } else {
             //登录失败，重新登录
