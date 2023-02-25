@@ -1,6 +1,6 @@
 create table LOGIN
 (
-    ID   INTEGER auto_increment primary key,
+    ID   INT auto_increment primary key,
     ACCOUNT_ID   CHARACTER VARYING(100),
     NAME         CHARACTER VARYING(50),
     TOKEN        CHARACTER(36),
