@@ -20,7 +20,7 @@ public class PaginationDTO {
     private List<Integer> pages = new ArrayList<Integer>();
     private Integer totalPage;
 
-    public void setPagination(Integer totalPage, Integer page, Integer size) {
+    public void setPagination(Integer totalPage, Integer page) {
         this.totalPage = totalPage;
         this.page = page;
         pages.add(page);

@@ -48,7 +48,7 @@ public class PublishController {
         }
         Login login = null;
         Cookie[] cookies = request.getCookies();
-        if (cookies != null&&cookies.length != 0) {
+        if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -68,7 +68,7 @@ public class PublishController {
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(login.getId());
+        question.setCreator(Integer.valueOf(login.getAccountId()));
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         questionMapper.create(question);

@@ -3,6 +3,7 @@ package life.joker.community.mapper;
 import life.joker.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -17,4 +18,10 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question")
     Integer count();
+
+    @Select("select * from question where creator=#{loginId}")
+    List<Question> listByLoginId(@Param("loginId") Integer loginId);
+
+    @Select("select count(1) from question where creator=#{loginId}")
+    Integer countByLoginId(@Param("loginId") Integer loginId);
 }

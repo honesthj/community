@@ -19,6 +19,9 @@ public interface LoginMapper {
     @Select("SELECT * FROM LOGIN WHERE token = #{token}")
     Login findByToken(@Param("token") String token);
 
+    @Select("SELECT * FROM LOGIN WHERE account_id = #{accountId}")
+    Login findByAccountId(@Param("accountId") String accountId);
+
     @Select("SELECT * FROM LOGIN WHERE id = #{id}")
-    Login findById(@Param("id") Integer id);
+    Login findById(@Param("id") Integer Id);
 }
