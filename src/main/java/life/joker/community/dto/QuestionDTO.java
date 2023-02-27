@@ -1,13 +1,14 @@
-package life.joker.community.model;
+package life.joker.community.dto;
 
+import life.joker.community.model.Login;
 import lombok.Data;
 
 /**
  * @author joker
- * @date 2023/02/24 16:54
+ * @date 2023/02/25 11:59
  **/
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
@@ -18,4 +19,5 @@ public class Question {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private Login login;
 }

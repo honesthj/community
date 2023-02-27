@@ -13,9 +13,12 @@ import org.apache.ibatis.annotations.Select;
  **/
 @Mapper
 public interface LoginMapper {
-    @Insert("INSERT INTO LOGIN (NAME,ACCOUNT_ID,TOKEN,GMT_CREATE,GMT_MODIFIED) VALUES (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("INSERT INTO LOGIN (NAME,ACCOUNT_ID,TOKEN,GMT_CREATE,GMT_MODIFIED,avatar_url,bio) VALUES (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl},#{bio})")
     void insert(Login login);
 
     @Select("SELECT * FROM LOGIN WHERE token = #{token}")
     Login findByToken(@Param("token") String token);
+
+    @Select("SELECT * FROM LOGIN WHERE id = #{id}")
+    Login findById(@Param("id") Integer id);
 }

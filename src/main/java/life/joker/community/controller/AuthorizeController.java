@@ -53,6 +53,8 @@ public class AuthorizeController {
             login.setAccountId(String.valueOf(user.getId()));
             login.setGmtCreate(System.currentTimeMillis());
             login.setGmtModified(login.getGmtCreate());
+            login.setAvatarUrl(user.getAvatarUrl());
+            login.setBio(user.getBio());
             loginMapper.insert(login);
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
