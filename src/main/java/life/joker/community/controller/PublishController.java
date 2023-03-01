@@ -1,8 +1,6 @@
 package life.joker.community.controller;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import life.joker.community.mapper.LoginMapper;
 import life.joker.community.mapper.QuestionMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.Question;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PublishController {
     @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
-    private LoginMapper loginMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -46,20 +42,7 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-        Login login = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    login = loginMapper.findByToken(token);
-                    if (login != null) {
-                        request.getSession().setAttribute("login", login);
-                    }
-                    break;
-                }
-            }
-        }
+        Login login = (Login) request.getSession().getAttribute("login");
         if (login == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
@@ -68,7 +51,7 @@ public class PublishController {
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(Integer.valueOf(login.getAccountId()));
+        question.setCreator(login.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         questionMapper.create(question);

@@ -5,9 +5,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import life.joker.community.dto.AccessTokenDTO;
 import life.joker.community.dto.GithubUser;
-import life.joker.community.mapper.LoginMapper;
 import life.joker.community.model.Login;
 import life.joker.community.provider.GithubProvider;
+import life.joker.community.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
     @Autowired
-    private LoginMapper loginMapper;
+    private LoginService loginService;
     @Value("${github.client.id}")
     private String clientId;
     @Value("${github.client.secret}")
@@ -36,7 +36,6 @@ public class AuthorizeController {
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
-                           HttpServletRequest request,
                            HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -51,16 +50,23 @@ public class AuthorizeController {
             login.setToken(token);
             login.setName(user.getName());
             login.setAccountId(String.valueOf(user.getId()));
-            login.setGmtCreate(System.currentTimeMillis());
-            login.setGmtModified(login.getGmtCreate());
             login.setAvatarUrl(user.getAvatarUrl());
             login.setBio(user.getBio());
-            loginMapper.insert(login);
+            loginService.createOrUpdate(login);
             response.addCookie(new Cookie("token", token));
             return "redirect:/";
         } else {
             //登录失败，重新登录
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logOut(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().removeAttribute("login");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

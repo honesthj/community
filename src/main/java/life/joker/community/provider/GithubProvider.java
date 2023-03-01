@@ -6,8 +6,6 @@ import life.joker.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 /**
  * @author joker
  * @date 2023/02/18 12:06

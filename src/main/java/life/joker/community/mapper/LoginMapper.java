@@ -1,10 +1,7 @@
 package life.joker.community.mapper;
 
 import life.joker.community.model.Login;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 
 /**
@@ -24,4 +21,7 @@ public interface LoginMapper {
 
     @Select("SELECT * FROM LOGIN WHERE id = #{id}")
     Login findById(@Param("id") Integer Id);
+
+    @Update("UPDATE LOGIN SET NAME=#{name},bio=#{bio},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} WHERE id = #{id}")
+    void update(Login login);
 }

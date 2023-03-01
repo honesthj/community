@@ -10,7 +10,7 @@
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
-<div th:replace="navigation :: nav"></div>
+<div th:replace="~{navigation :: nav}"></div>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -23,14 +23,16 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <h4 class="media-heading" >
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                    </h4>
                     <span th:text="${question.description}"></span><br>
                     <span class="text-desc"><span th:text="${question.commentCount}"></span>个回复 · <span
                             th:text="${question.viewCount}"></span>次浏览 ·<span
                             th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
                 </div>
             </div>
-            <nav aria-label="Page navigation">
+            <nav aria-label="Page navigation" th:if="${pagination.totalPage!=0}">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
                         <a href="/?page=1" aria-label="First">
