@@ -5,10 +5,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import life.joker.community.mapper.LoginMapper;
 import life.joker.community.model.Login;
+import life.joker.community.model.LoginExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * @author joker
@@ -26,9 +29,11 @@ public class SessionInterceptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if ("token".equals(cookie.getName())) {
                     String token = cookie.getValue();
-                    Login login = loginMapper.findByToken(token);
-                    if (login != null) {
-                        request.getSession().setAttribute("login", login);
+                    LoginExample loginExample = new LoginExample();
+                    loginExample.createCriteria().andTokenEqualTo(token);
+                    List<Login> logins = loginMapper.selectByExample(loginExample);
+                    if (logins.size() != 0) {
+                        request.getSession().setAttribute("login", logins.get(0));
                     }
                     break;
                 }

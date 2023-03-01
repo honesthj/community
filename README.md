@@ -4,4 +4,10 @@
 https://spring.io/guides/gs/serving-web-content/
 
 ##工具
-Git
+Git 
+Idea
+##脚本
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```

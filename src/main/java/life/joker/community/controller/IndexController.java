@@ -1,6 +1,5 @@
 package life.joker.community.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import life.joker.community.dto.PaginationDTO;
 import life.joker.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, Model model, @RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "5") Integer size) {
+    public String index(Model model, @RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "size", defaultValue = "5") Integer size) {
 
         PaginationDTO pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);

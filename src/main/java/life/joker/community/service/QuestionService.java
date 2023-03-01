@@ -7,6 +7,7 @@ import life.joker.community.mapper.LoginMapper;
 import life.joker.community.mapper.QuestionMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.Question;
+import life.joker.community.model.QuestionExample;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class QuestionService {
     private LoginMapper loginMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
-        Integer totalcount = questionMapper.count();
+        Integer totalcount = (int) questionMapper.countByExample(new QuestionExample());
         Integer totalPage = totalcount / size + (totalcount % size != 0 ? 1 : 0);
         if (page < 1) {
             page = 1;
@@ -35,11 +36,11 @@ public class QuestionService {
             page = totalPage;
         }
         PageHelper.startPage(page, size);
-        List<Question> questions = questionMapper.list();
+        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questions) {
-            Login login = loginMapper.findById(question.getCreator());
+            Login login = loginMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setLogin(login);
@@ -51,7 +52,9 @@ public class QuestionService {
     }
 
     public PaginationDTO list(Integer loginId, Integer page, Integer size) {
-        Integer totalcount = questionMapper.countByLoginId(loginId);
+        QuestionExample questionexample = new QuestionExample();
+        questionexample.createCriteria().andCreatorEqualTo(loginId);
+        Integer totalcount = (int) questionMapper.countByExample(questionexample);
         Integer totalPage = totalcount / size + (totalcount % size != 0 ? 1 : 0);
         if (page < 1) {
             page = 1;
@@ -60,11 +63,11 @@ public class QuestionService {
             page = totalPage;
         }
         PageHelper.startPage(page, size);
-        List<Question> questions = questionMapper.listByLoginId(loginId);
+        List<Question> questions = questionMapper.selectByExample(questionexample);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questions) {
-            Login login = loginMapper.findById(question.getCreator());
+            Login login = loginMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setLogin(login);
@@ -76,11 +79,26 @@ public class QuestionService {
     }
 
     public QuestionDTO getById(Integer id) {
-        Question question = questionMapper.findById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        Login login = loginMapper.findById(question.getCreator());
+        Login login = loginMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setLogin(login);
         return questionDTO;
     }
+
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null) {
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insertSelective(question);
+        } else {
+            //更新
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateByPrimaryKeySelective(question);
+        }
+    }
+
+
 }
