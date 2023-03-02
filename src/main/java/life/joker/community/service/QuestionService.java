@@ -3,7 +3,10 @@ package life.joker.community.service;
 import com.github.pagehelper.PageHelper;
 import life.joker.community.dto.PaginationDTO;
 import life.joker.community.dto.QuestionDTO;
+import life.joker.community.exception.CustomizeErrorCode;
+import life.joker.community.exception.CustomizeException;
 import life.joker.community.mapper.LoginMapper;
+import life.joker.community.mapper.QuestionExtMapper;
 import life.joker.community.mapper.QuestionMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.Question;
@@ -23,6 +26,8 @@ import java.util.List;
 public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     @Autowired
     private LoginMapper loginMapper;
 
@@ -80,6 +85,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         Login login = loginMapper.selectByPrimaryKey(question.getCreator());
@@ -96,9 +104,18 @@ public class QuestionService {
         } else {
             //更新
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByPrimaryKeySelective(question);
+            int updated = questionMapper.updateByPrimaryKeySelective(question);
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+            }
         }
     }
 
 
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
+    }
 }
