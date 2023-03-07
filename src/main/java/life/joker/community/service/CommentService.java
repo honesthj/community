@@ -4,10 +4,7 @@ import life.joker.community.dto.CommentDTO;
 import life.joker.community.enums.CommentTypeEnum;
 import life.joker.community.exception.CustomizeErrorCode;
 import life.joker.community.exception.CustomizeException;
-import life.joker.community.mapper.CommentMapper;
-import life.joker.community.mapper.LoginMapper;
-import life.joker.community.mapper.QuestionExtMapper;
-import life.joker.community.mapper.QuestionMapper;
+import life.joker.community.mapper.*;
 import life.joker.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class CommentService {
     private LoginMapper loginMapper;
     @Autowired
     private QuestionExtMapper questionExtMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
     static final Integer DEFAULT_COMMENT_COUNT_STEP = 1;
 
     @Transactional(rollbackFor = Exception.class)
@@ -45,7 +44,7 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
         if (comment.getType().equals(CommentTypeEnum.COMMENT.getType())) {
-            //回复评论
+            //回复评论,获得一级回复
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
@@ -58,6 +57,9 @@ public class CommentService {
             commentMapper.insertSelective(comment);
             question.setCommentCount(DEFAULT_COMMENT_COUNT_STEP);
             questionExtMapper.incCommentCount(question);
+            //二级回复给一级回复增加评论数
+            dbComment.setCommentCount(DEFAULT_COMMENT_COUNT_STEP);
+            commentExtMapper.incCommentCount(dbComment);
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -70,9 +72,10 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuestionId(Long id) {
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(type.getType());
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> commentList = commentMapper.selectByExample(commentExample);
         if (commentList.size() == 0) {
             return new ArrayList<>();

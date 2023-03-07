@@ -9,6 +9,7 @@
     <script src="/js/jquery-3.6.3.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
+    <script src="/js/moment.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:replace="~{navigation :: nav}"></div>
@@ -18,7 +19,7 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <!--正文-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h3><span th:text="${question.title}"></span></h3>
+                <h3 class="question-title"><span th:text="${question.title}"></span></h3>
                 <span class="text-desc">
                 作者：<span th:text="${question.login.name}"></span>  |
                 发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>  |
@@ -46,16 +47,30 @@
                                 <img class="media-object img-rounded" th:src="${comment.login.avatarUrl}" alt="...">
                             </a>
                         </div>
-                        <div class="media-body">
+                        <div class="media-body" th:id="${'comment-body-'+comment.id}">
                             <h5 class="media-heading">
                                 <span th:text="${comment.login.name}"></span>
                             </h5>
                             <div th:text="${comment.content}"></div>
                             <div class="menu">
                                 <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
-                                <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-comment icon" aria-hidden="true"
+                                      th:data-id="${comment.id}" onclick="collapseComments(this)"
+                                      th:text="${comment.commentCount}"></span>
                                 <span class="pull-right"
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                            </div>
+                            <!--二级评论-->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
+                                 th:id="${'comment-'+comment.id}">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="评论一下……"
+                                           th:id="${'input-'+comment.id}">
+                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
+                                            th:data-id="${comment.id}">评论
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

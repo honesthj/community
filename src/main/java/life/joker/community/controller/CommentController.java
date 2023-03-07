@@ -2,7 +2,9 @@ package life.joker.community.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import life.joker.community.dto.CommentCreateDTO;
+import life.joker.community.dto.CommentDTO;
 import life.joker.community.dto.ResultDTO;
+import life.joker.community.enums.CommentTypeEnum;
 import life.joker.community.exception.CustomizeErrorCode;
 import life.joker.community.model.Comment;
 import life.joker.community.model.Login;
@@ -10,10 +12,9 @@ import life.joker.community.service.CommentService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author joker
@@ -46,5 +47,12 @@ public class CommentController {
         comment.setLikeCount(defaultLikeCount);
         commentService.insert(comment);
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
     }
 }

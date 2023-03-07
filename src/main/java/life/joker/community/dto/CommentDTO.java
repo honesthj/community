@@ -26,4 +26,5 @@ public class CommentDTO {
     private String content;
 
     private Login login;
+    private Integer commentCount;
 }
