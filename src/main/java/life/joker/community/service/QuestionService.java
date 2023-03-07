@@ -11,12 +11,14 @@ import life.joker.community.mapper.QuestionMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.Question;
 import life.joker.community.model.QuestionExample;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author joker
@@ -121,5 +123,23 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(DEFAULT_VIEW_COUNT_STEP);
         questionExtMapper.incView(question);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if (StringUtils.isBlank(queryDTO.getTag())) {
+            return new ArrayList<QuestionDTO>();
+        }
+        //替换成正则表达式的格式
+        String regexpTag = StringUtils.replace(queryDTO.getTag(), ",", "|");
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
     }
 }
