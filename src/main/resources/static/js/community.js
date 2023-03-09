@@ -98,3 +98,23 @@ function collapseComments(e) {
         }
     }
 }
+
+function tapTag(e) {
+    let previous = $("#tag").val();
+    let value = e.getAttribute("data-tag");
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + value);
+        } else {
+            $("#tag").val(value);
+        }
+    }
+}
+
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+function hideSelectTag() {
+    $("#select-tag").hide();
+}
