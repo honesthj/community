@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import life.joker.community.mapper.LoginMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.LoginExample;
+import life.joker.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +22,8 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private LoginMapper loginMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -34,6 +37,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<Login> logins = loginMapper.selectByExample(loginExample);
                     if (logins.size() != 0) {
                         request.getSession().setAttribute("login", logins.get(0));
+                        Long unreadCount = notificationService.unreadCount(logins.get(0).getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     }
                     break;
                 }
