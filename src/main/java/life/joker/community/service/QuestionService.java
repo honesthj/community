@@ -34,8 +34,13 @@ public class QuestionService {
     private LoginMapper loginMapper;
     static final Integer DEFAULT_VIEW_COUNT_STEP = 1;
 
-    public PaginationDTO list(Integer page, Integer size) {
-        Integer totalcount = (int) questionMapper.countByExample(new QuestionExample());
+    public PaginationDTO list(String search, Integer page, Integer size) {
+        String regexpSearch = null;
+        if (StringUtils.isNotBlank(search)) {
+            //替换成正则表达式的格式
+            regexpSearch = StringUtils.replace(search, " ", "|");
+        }
+        Integer totalcount = questionExtMapper.countBySearch(regexpSearch);
         Integer totalPage = totalcount / size + (totalcount % size != 0 ? 1 : 0);
         if (page < 1) {
             page = 1;
@@ -44,9 +49,7 @@ public class QuestionService {
             page = totalPage;
         }
         PageHelper.startPage(page, size);
-        QuestionExample example = new QuestionExample();
-        example.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExample(example);
+        List<Question> questions = questionExtMapper.selectBySearch(regexpSearch);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questions) {

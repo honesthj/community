@@ -119,3 +119,8 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.footer {
+    padding: 10px 25%;
+    color: #666;
+}

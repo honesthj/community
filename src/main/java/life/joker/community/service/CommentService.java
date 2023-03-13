@@ -82,6 +82,10 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, int type) {
+        //自己回复自己的问题不应该通知
+        if (receiver.equals(comment.getCommentator())) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(type);

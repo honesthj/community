@@ -29,4 +29,22 @@
         where id != #{id}
           and tag regexp #{tag}
     </select>
+    <select id="selectBySearch" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from QUESTION
+        <where>
+            <if test="search!=null">
+                and title regexp #{search}
+            </if>
+        </where>
+        order by gmt_create desc
+    </select>
+    <select id="countBySearch" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from QUESTION
+        <where>
+            <if test="search!=null">
+                and title regexp #{search}
+            </if>
+        </where>
+    </select>
 </mapper>

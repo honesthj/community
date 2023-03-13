@@ -8,6 +8,8 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import life.joker.community.exception.CustomizeErrorCode;
+import life.joker.community.exception.CustomizeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +52,7 @@ public class QiniuProvider {
         try {
             Response res = uploadManager.put(file, generatedFilename, token, null, null);
             if (!res.isOK()) {
-                throw new RuntimeException("上传七牛出错：" + res.toString());
+                throw new CustomizeException(CustomizeErrorCode.FILE_UPLOAD_FAIL);
             }
             // 解析上传成功的结果
             DefaultPutRet putRet = JSON.parseObject(res.bodyString(), DefaultPutRet.class);
@@ -58,7 +60,7 @@ public class QiniuProvider {
             // 这个returnPath是获得到的外链地址,通过这个地址可以直接打开图片
             return path;
         } catch (QiniuException e) {
-            throw new RuntimeException(e);
+            throw new CustomizeException(CustomizeErrorCode.FILE_UPLOAD_FAIL);
         }
     }
 }
