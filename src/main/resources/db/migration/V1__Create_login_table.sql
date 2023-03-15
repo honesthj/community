@@ -1,9 +1,9 @@
-create table LOGIN
+create table login
 (
-    ID   INT auto_increment primary key,
-    ACCOUNT_ID   CHARACTER VARYING(100),
-    NAME         CHARACTER VARYING(50),
-    TOKEN        CHARACTER(36),
-    GMT_CREATE   BIGINT,
-    GMT_MODIFIED BIGINT
+    id   int auto_increment primary key,
+    account_id   character varying(100),
+    name         character varying(50),
+    token        character(36),
+    gmt_create   bigint,
+    gmt_modified bigint
 );

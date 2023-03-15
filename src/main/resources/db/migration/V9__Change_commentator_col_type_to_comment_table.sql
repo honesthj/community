@@ -1,2 +1,2 @@
-alter table COMMENT
-alter column COMMENTATOR BIGINT not null;
+alter table comment
+alter column commentator bigint not null;

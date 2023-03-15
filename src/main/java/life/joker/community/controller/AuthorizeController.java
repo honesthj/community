@@ -8,6 +8,7 @@ import life.joker.community.dto.GithubUser;
 import life.joker.community.model.Login;
 import life.joker.community.provider.GithubProvider;
 import life.joker.community.service.LoginService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.UUID;
  **/
 
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
@@ -57,6 +59,7 @@ public class AuthorizeController {
             return "redirect:/";
         } else {
             //登录失败，重新登录
+            log.error("callback get github error,{}", user);
             return "redirect:/";
         }
     }

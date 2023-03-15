@@ -1,6 +1,6 @@
-alter table QUESTION
+alter table question
 alter
-column ID BIGINT auto_increment;
+column id bigint auto_increment;
 alter table login
 alter
-column ID BIGINT auto_increment;
+column id bigint auto_increment;

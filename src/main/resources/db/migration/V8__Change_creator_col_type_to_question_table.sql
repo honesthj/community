@@ -1,3 +1,3 @@
-alter table QUESTION
+alter table question
 alter
-column CREATOR BIGINT;
+column creator bigint;

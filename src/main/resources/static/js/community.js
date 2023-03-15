@@ -22,6 +22,7 @@ function comment2target(targetId, type, content) {
                 if (response.code == 2003) {
                     let isAccepted = confirm(response.message);
                     if (isAccepted) {
+                        console.log(location.href);
                         window.open("https://github.com/login/oauth/authorize?client_id=354b6dfffc186bef405d&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
                         window.localStorage.setItem("closeable", "true");
                         setTimeout("location.reload();", 3000);
