@@ -1,5 +1,6 @@
 package life.joker.community.mapper;
 
+import life.joker.community.dto.QuestionQueryDTO;
 import life.joker.community.model.Question;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface QuestionExtMapper {
 
     List<Question> selectRelated(Question question);
 
-    Integer countBySearch(String search);
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
 
-    List<Question> selectBySearch(String search);
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

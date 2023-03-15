@@ -3,6 +3,7 @@ package life.joker.community.service;
 import com.github.pagehelper.PageHelper;
 import life.joker.community.dto.PaginationDTO;
 import life.joker.community.dto.QuestionDTO;
+import life.joker.community.dto.QuestionQueryDTO;
 import life.joker.community.exception.CustomizeErrorCode;
 import life.joker.community.exception.CustomizeException;
 import life.joker.community.mapper.LoginMapper;
@@ -34,13 +35,16 @@ public class QuestionService {
     private LoginMapper loginMapper;
     static final Integer DEFAULT_VIEW_COUNT_STEP = 1;
 
-    public PaginationDTO list(String search, Integer page, Integer size) {
+    public PaginationDTO list(String search, String tag, Integer page, Integer size) {
         String regexpSearch = null;
         if (StringUtils.isNotBlank(search)) {
             //替换成正则表达式的格式
             regexpSearch = StringUtils.replace(search, " ", "|");
         }
-        Integer totalcount = questionExtMapper.countBySearch(regexpSearch);
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(regexpSearch);
+        questionQueryDTO.setTag(tag);
+        Integer totalcount = questionExtMapper.countBySearch(questionQueryDTO);
         Integer totalPage = totalcount / size + (totalcount % size != 0 ? 1 : 0);
         if (page < 1) {
             page = 1;
@@ -49,7 +53,7 @@ public class QuestionService {
             page = totalPage;
         }
         PageHelper.startPage(page, size);
-        List<Question> questions = questionExtMapper.selectBySearch(regexpSearch);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         PaginationDTO paginationDTO = new PaginationDTO();
         for (Question question : questions) {
