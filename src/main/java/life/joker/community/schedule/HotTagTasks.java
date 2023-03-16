@@ -30,29 +30,45 @@ public class HotTagTasks {
     @Autowired
     private HotTagCache hotTagCache;
 
-    // @Scheduled(fixedRate = 10000)
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(fixedRate = 1000 * 60 * 60 * 6)
+    //@Scheduled(cron = "0 0 1 * * *")
     public void hotTagSchedule() {
         int offset = 0;
         int limit = 20;
         List<Question> list = new ArrayList<>();
         Map<String, Integer> priorities = new HashMap<>();
+        Map<String, Integer> counts = new HashMap<>();
+        Map<String, Integer> commentCounts = new HashMap<>();
         while (offset == 0 || list.size() == limit) {
             list = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, limit));
             for (Question question : list) {
                 String[] tags = StringUtils.split(question.getTag(), ",");
                 for (String tag : tags) {
                     Integer priority = priorities.get(tag);
+                    Integer count = counts.get(tag);
+                    Integer commentCount = commentCounts.get(tag);
                     if (priority != null) {
                         //权重值设置
                         priorities.put(tag, priority + 5 + question.getCommentCount());
                     } else {
                         priorities.put(tag, 5 + question.getCommentCount());
                     }
+                    if (count != null) {
+                        //问题数设置
+                        counts.put(tag, count + 1);
+                    } else {
+                        counts.put(tag, 1);
+                    }
+                    if (commentCount != null) {
+                        //回复数设置
+                        commentCounts.put(tag, commentCount + question.getCommentCount());
+                    } else {
+                        commentCounts.put(tag, question.getCommentCount());
+                    }
                 }
             }
             offset += limit;
         }
-        hotTagCache.updateTags(priorities);
+        hotTagCache.updateTags(priorities, counts, commentCounts);
     }
 }

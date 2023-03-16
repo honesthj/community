@@ -12,6 +12,9 @@ public class HotTagDTO implements Comparable {
     private String name;
     private Integer priority;
 
+    private Integer count;
+    private Integer commentCount;
+
     @Override
     public int compareTo(@NotNull Object o) {
         return this.getPriority() - ((HotTagDTO) o).getPriority();

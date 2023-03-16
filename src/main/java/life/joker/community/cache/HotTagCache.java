@@ -14,15 +14,17 @@ import java.util.*;
 @Data
 public class HotTagCache {
 
-    private List<String> hots = new ArrayList<>();
+    private List<HotTagDTO> hots = new ArrayList<>();
 
-    public void updateTags(Map<String, Integer> tags) {
+    public void updateTags(Map<String, Integer> tags, Map<String, Integer> counts, Map<String, Integer> commentCounts) {
         int max = 5;
         PriorityQueue<HotTagDTO> priorityQueue = new PriorityQueue<>(max);
         tags.forEach((name, priority) -> {
             HotTagDTO hotTagDTO = new HotTagDTO();
             hotTagDTO.setName(name);
             hotTagDTO.setPriority(priority);
+            hotTagDTO.setCount(counts.get(name));
+            hotTagDTO.setCommentCount(commentCounts.get(name));
             if (priorityQueue.size() < max) {
                 priorityQueue.add(hotTagDTO);
             } else {
@@ -33,9 +35,9 @@ public class HotTagCache {
                 }
             }
         });
-        List<String> sortedTags = new ArrayList<>();
+        List<HotTagDTO> sortedTags = new ArrayList<>();
         while (!priorityQueue.isEmpty()) {
-            sortedTags.add(0, priorityQueue.poll().getName());
+            sortedTags.add(0, priorityQueue.poll());
         }
         hots = sortedTags;
     }

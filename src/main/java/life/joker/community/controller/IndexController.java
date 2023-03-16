@@ -1,6 +1,7 @@
 package life.joker.community.controller;
 
 import life.joker.community.cache.HotTagCache;
+import life.joker.community.dto.HotTagDTO;
 import life.joker.community.dto.PaginationDTO;
 import life.joker.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class IndexController {
                         @RequestParam(name = "search", required = false) String search,
                         @RequestParam(name = "tag", required = false) String tag) {
         PaginationDTO pagination = questionService.list(search, tag, page, size);
-        List<String> tags = hotTagCache.getHots();
+        List<HotTagDTO> tags = hotTagCache.getHots();
         model.addAttribute("pagination", pagination);
         model.addAttribute("search", search);
         model.addAttribute("tag", tag);
