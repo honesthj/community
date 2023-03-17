@@ -104,7 +104,8 @@ function collapseComments(e) {
 function tapTag(e) {
     let previous = $("#tag").val();
     let value = e.getAttribute("data-tag");
-    if (previous.indexOf(value) == -1) {
+    let previousArray = previous.split(',');
+    if (previousArray.indexOf(value) == -1) {
         if (previous) {
             $("#tag").val(previous + ',' + value);
         } else {

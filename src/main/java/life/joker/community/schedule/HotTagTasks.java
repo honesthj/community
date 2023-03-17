@@ -24,21 +24,20 @@ import java.util.Map;
 @Component
 @Slf4j
 public class HotTagTasks {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
     private HotTagCache hotTagCache;
 
     @Scheduled(fixedRate = 1000 * 60 * 60 * 6)
-    //@Scheduled(cron = "0 0 1 * * *")
     public void hotTagSchedule() {
         int offset = 0;
         int limit = 20;
         List<Question> list = new ArrayList<>();
-        Map<String, Integer> priorities = new HashMap<>();
-        Map<String, Integer> counts = new HashMap<>();
-        Map<String, Integer> commentCounts = new HashMap<>();
+        Map<String, Integer> priorities = new HashMap<>(16);
+        Map<String, Integer> counts = new HashMap<>(16);
+        Map<String, Integer> commentCounts = new HashMap<>(16);
         while (offset == 0 || list.size() == limit) {
             list = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, limit));
             for (Question question : list) {

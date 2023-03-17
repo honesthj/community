@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ProfileController {
 
+    public static final String ACTION_TYPE_QUESTIONS = "questions";
+    public static final String ACTION_TYPE_REPLIES = "replies";
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -30,12 +32,12 @@ public class ProfileController {
         if (login == null) {
             return "redirect:/";
         }
-        if ("questions".equals(action)) {
+        if (ACTION_TYPE_QUESTIONS.equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
             PaginationDTO pagination = questionService.list(login.getId(), page, size);
             model.addAttribute("pagination", pagination);
-        } else if ("replies".equals(action)) {
+        } else if (ACTION_TYPE_REPLIES.equals(action)) {
             PaginationDTO pagination = notificationService.list(login.getId(), page, size);
             model.addAttribute("pagination", pagination);
             model.addAttribute("section", "replies");

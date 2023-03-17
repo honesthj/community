@@ -22,10 +22,12 @@ import java.io.PrintWriter;
  **/
 @ControllerAdvice
 public class CustomizeExceptionHandler {
+    static final String CONTENT_TYPE = "application/json";
+
     @ExceptionHandler(Exception.class)
     ModelAndView handle(Throwable e, Model model, HttpServletRequest request, HttpServletResponse response) {
         String contentType = request.getContentType();
-        if ("application/json".equals(contentType)) {
+        if (CONTENT_TYPE.equals(contentType)) {
             ResultDTO resultDTO = null;
             //返回 JSON
             if (e instanceof CustomizeException) {

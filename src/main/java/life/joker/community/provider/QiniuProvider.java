@@ -30,10 +30,14 @@ public class QiniuProvider {
     private String bucket;
     @Value("${qiniu.domain}")
     private String domain;
-    // 七牛文件上传管理器
+    /**
+     * 七牛文件上传管理器
+     */
     private UploadManager uploadManager;
     private String token;
-    // 七牛认证管理
+    /**
+     * 七牛认证管理
+     */
     private Auth auth;
 
     public String upload(InputStream file, String filename) {

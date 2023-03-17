@@ -12,19 +12,21 @@ import java.util.List;
 @Data
 public class PaginationDTO<T> {
     private List<T> data;
-    private boolean showPrevious;
-    private boolean showFirstPage;
-    private boolean showNext;
-    private boolean showEndPage;
+    private Boolean showPrevious;
+    private Boolean showFirstPage;
+    private Boolean showNext;
+    private Boolean showEndPage;
     private Integer page;
-    private List<Integer> pages = new ArrayList<Integer>();
+    private List<Integer> pages;
     private Integer totalPage;
+    static final Integer DEFAULT_PAGE = 3;
 
     public void setPagination(Integer totalPage, Integer page) {
         this.totalPage = totalPage;
         this.page = page;
+        pages = new ArrayList<Integer>();
         pages.add(page);
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= DEFAULT_PAGE; i++) {
             if (page - i > 0) {
                 pages.add(0, page - i);
             }

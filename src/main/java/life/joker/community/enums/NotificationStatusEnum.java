@@ -5,7 +5,10 @@ package life.joker.community.enums;
  * @date 2023/03/08 20:42
  **/
 public enum NotificationStatusEnum {
-    UNREAD(0), READ(1);
+    //通知未读状态
+    UNREAD(0),
+    //通知已读状态
+    READ(1);
     private int status;
 
     public int getStatus() {

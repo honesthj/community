@@ -22,7 +22,7 @@ import java.util.List;
  **/
 @Controller
 public class CommentController {
-    static final Long defaultLikeCount = 0L;
+    static final Long DEFAULT_LIKE_COUNT = 0L;
     @Autowired
     private CommentService commentService;
 
@@ -44,7 +44,7 @@ public class CommentController {
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommentator(login.getId());
-        comment.setLikeCount(defaultLikeCount);
+        comment.setLikeCount(DEFAULT_LIKE_COUNT);
         commentService.insert(comment, login);
         return ResultDTO.okOf();
     }
