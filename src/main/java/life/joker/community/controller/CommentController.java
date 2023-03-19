@@ -1,6 +1,6 @@
 package life.joker.community.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+
 import life.joker.community.dto.CommentCreateDTO;
 import life.joker.community.dto.CommentDTO;
 import life.joker.community.dto.ResultDTO;
@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

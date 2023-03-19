@@ -1,8 +1,6 @@
 package life.joker.community.interceptor;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import life.joker.community.mapper.LoginMapper;
 import life.joker.community.model.Login;
 import life.joker.community.model.LoginExample;
@@ -13,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**

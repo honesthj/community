@@ -108,9 +108,11 @@ public class CommentService {
         }
         //获取去重的评论人
         Set<Long> commentators = commentList.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
+        List<Long> userIds = new ArrayList();
+        userIds.addAll(commentators);
         //获取评论人并转换为Map
         LoginExample loginExample = new LoginExample();
-        loginExample.createCriteria().andIdIn(commentators.stream().toList());
+        loginExample.createCriteria().andIdIn(userIds);
         List<Login> logins = loginMapper.selectByExample(loginExample);
         Map<Long, Login> loginMap = logins.stream().collect(Collectors.toMap(login -> login.getId(), login -> login));
         //转换comment为commentDTO
