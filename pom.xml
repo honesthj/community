@@ -21,6 +21,8 @@
             <id>dev</id>
             <properties>
                 <db.url>jdbc:h2:~/community</db.url>
+                <db.user></db.user>
+                <db.password></db.password>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -60,8 +62,8 @@
             <version>2.0.23</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>8.0.32</version>
         </dependency>
         <dependency>
@@ -114,8 +116,8 @@
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
+                        <groupId>com.mysql</groupId>
+                        <artifactId>mysql-connector-j</artifactId>
                         <version>8.0.32</version>
                     </dependency>
                     <dependency>
